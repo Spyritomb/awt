@@ -39,6 +39,16 @@ class BasketModel extends Model
         return ($exists == 1);
     }
 
+    public function ispurchased(BasketEntity $basket): bool
+    {
+        $exists = $this
+            ->select()
+            ->where('id', $basket->id)
+            ->where('purchased', false)
+            ->countAllResults();
+        return ($exists == 0);
+    }
+
     /** Creates a basket for the user if on does not exist
      *
      */
@@ -58,7 +68,7 @@ class BasketModel extends Model
             } catch (\ReflectionException $exception) {
                 log_message('error', '[ERROR] {exception}', ['exception' => $exception]);
             }
-            log_message('error','failed ot make basket');
+            log_message('error', 'failed to make basket');
         } else {
             return $this->finduserid($user);
         }
@@ -72,6 +82,7 @@ class BasketModel extends Model
         return $productBasketModel->saveProduct($basket, $product, $qty);
     }
 
+    //find a basket by a user's id
     public function finduserid(UserEntity $user)
     {
         $theuserid = $this
@@ -82,8 +93,24 @@ class BasketModel extends Model
         return $theuserid;
     }
 
-    public function updateBasket()
+
+
+    public function checkout(BasketEntity $basket)
     {
+        $purchased = $this
+            ->select()
+            ->where('id',$basket->id)
+            ->where('purchased',false)
+            ->first();
+
+        try{
+
+            return $this->update($purchased->id,['purchased'=>true]);
+
+        }catch (\ReflectionException $exception){
+
+            return ($exception);
+        }
 
     }
 

@@ -37,13 +37,13 @@ $routes->get('/login', 'Auth::login');
 $routes->get('/logout', 'Auth::logout');
 $routes->get('/register', 'Auth::register');
 
-$routes->post('/','Basket::basket');
+//$routes->post('/','Basket::basket');
 
 $routes->get('/basket', 'Basket::index');
 
 $routes->get('/set', 'Auth::setlogin');
 
-$routes->get('/(:alpha)', 'Product::index/$1');
+//$routes->get('/(:alpha)', 'Product::index/$1');
 
 
 

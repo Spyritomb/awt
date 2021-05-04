@@ -17,7 +17,7 @@ class UserModel extends Model
     protected $returnType = 'App\Entities\UserEntity';
     protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['name', 'password','email','phone'];
+    protected $allowedFields = ['name', 'password', 'email', 'phone'];
 
     protected $useTimestamps = false;
     protected $createdField = 'created_at';
@@ -25,9 +25,9 @@ class UserModel extends Model
     protected $deletedField = 'deleted_at';
 
     protected $validationRules = [
-        'name' => 'required|max_length[211]' ,
-        'phone' =>   'required|max_length[10]|min_length[10]|numeric',
-        'email' =>   'required|valid_email',
+        'name' => 'required|max_length[211]',
+        'phone' => 'required|max_length[10]|min_length[10]|numeric',
+        'email' => 'required|valid_email',
         'password' => 'required|min_length[10]',
         'password_confirm' => 'required|matches[password]'
     ];
@@ -65,11 +65,11 @@ class UserModel extends Model
                     'id' => $dbUser->id
                 ]);
             } else {
-                log_message('error','Credentials incorrect');
+                log_message('error', 'Credentials incorrect');
                 return false;
             }
         } else {
-            log_message('error','UserEntity does not exist');
+            log_message('error', 'UserEntity does not exist');
             return false;
         }
 
@@ -81,7 +81,7 @@ class UserModel extends Model
 
     public function registerUser(UserEntity $user): bool
     {
-        log_message('error', 'MODEL RPOBLEM', ['exception' => $user]);
+        log_message('error', 'MODEL PROBLEM', ['exception' => $user]);
         try {
             if ($this->insert($user)) {
                 return true;
@@ -90,6 +90,22 @@ class UserModel extends Model
             }
         } catch (\ReflectionException $e) {
             log_message('error', '[ERROR] {exception}', ['exception' => $e]);
+            return false;
+        }
+    }
+
+    public function checkadmin(UserEntity $user):bool
+    {
+
+        $result = $this
+            ->where('id', $user->id)
+            ->where('admin', true)
+            ->countAllResults();
+
+
+        if ($result==1) {
+            return true;
+        } else {
             return false;
         }
     }

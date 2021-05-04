@@ -69,19 +69,6 @@ class Product extends BaseController
         return $this->respond($products, 200);
     }
 
-//    public function sortCategory($category = 'all')
-//    {
-//        $productModel = new ProductModel();
-//        $products = $productModel->readByBrand(new ProductEntity(['category' => $category]));
-//
-//        if (empty($products)) {
-//            //$products['status'] = 404;
-//            return $this->respond($products, 404);
-//        }
-//        //$products['status'] = 200;
-//        return $this->respond($products, 200);
-//    }
-
 }
 
 //TODO: put toast when adding to cart https://getbootstrap.com/docs/5.0/components/toasts/

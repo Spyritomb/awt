@@ -196,41 +196,70 @@
                     content += `
                         <div class="col">
                         <div class="card" >
-                                                <div id="carouselExampleControls${product.name}" class="carousel slide" data-bs-ride="carousel">
+                                                <div id="carouselExampleControls${product.name.replace(/\s/g, '')}" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img src="/images/Carousel1/${product.image}" class="d-block w-100 h-50" alt="${product.name}">
+                                <img src="/images/Carousel1/${product.image}" class="d-block w-100 h-50" alt="${product.name.replace(/\s/g, '')}">
                             </div>
                             <div class="carousel-item">
-                                <img src="/images/Carousel2/${product.image}" class="d-block img-fluid" alt="${product.name}">
+                                <img src="/images/Carousel2/${product.image}" class="d-block img-fluid" alt="${product.name.replace(/\s/g, '')}">
                             </div>
                             <div class="carousel-item">
-                                <img src="/images/Carousel3/${product.image}" class="d-block img-fluid" alt="${product.name}">
+                                <img src="/images/Carousel3/${product.image}" class="d-block img-fluid" alt="${product.name.replace(/\s/g, '')}">
                             </div>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls${product.name}" data-bs-slide="prev">
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls${product.name.replace(/\s/g, '')}" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls${product.name}" data-bs-slide="next">
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls${product.name.replace(/\s/g, '')}" data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                         </button>
                     </div>
-
                             <div class="card-body">
                                 <h5 class="card-title">${product.name}</h5>
                                 <p class="card-text">${product.description}</p>
                             </div>
+
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item">${product.brand}</li>
-                                <li class="list-group-item">&pound;${product.price}</li>
+                                <li class="list-group-item"><div class="container">
+                                      <div class="row">
+                                        <div class="col-sm">
+                                          Brand:
+                                        </div>
+                                        <div class="col-sm text-end">
+                                          ${product.brand}
+                                        </div>
+                                      </div>
+                                    </div>
+                                 </li>
+                                <li class="list-group-item"><div class="container">
+                                      <div class="row">
+                                        <div class="col-sm test-start">
+                                          Price:
+                                        </div>
+                                        <div class="col-sm text-end">
+                                          &pound;${product.price}
+                                        </div>
+                                      </div>
+                                    </div>
+                                </li>
                             </ul>
                             <div class="card-body">
-                                <input type="number" id="qty${product.id}" class="form-control"
+                                    <div>
+                                            <div class="container">
+                                              <div class="row">
+                                                <div class="col-sm">
+                                                  <input type="number" id="qty${product.id}" class="form-control"
                                                    min="1" value="1">
-                                     <button type="submit" class="btn btn-dark btn-sm" onclick="addToCart(${product.id})">Add to basket</button>
-
+                                                </div>
+                                                <div class="col-sm">
+                                                  <button type="submit" class="btn btn-dark btn-sm" onclick="addToCart(${product.id})">Add to basket</button>
+                                                </div>
+                                              </div>
+                                            </div>
+                                    </div>
                             </div>
                         </div>
                     </div>`;
@@ -244,7 +273,7 @@
     }
 
     function addToCart(productID) {
-        let quantity = parseInt($('#qty'+productID).val());
+        let quantity = parseInt($('#qty' + productID).val());
         $.getJSON("/basket/addBasket/" + productID + "/" + quantity, function (data) {
             console.log("Made request successfully!");
         })

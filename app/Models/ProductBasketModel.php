@@ -74,4 +74,20 @@ class ProductBasketModel extends Model
         return (!empty($this->findProductBasket($productBasket)));
     }
 
+    public function orderitems(ProductBasketEntity $productBasket){
+
+        return $this
+            ->asArray()
+            ->select()
+            ->where('basketid',$productBasket->basketid)
+            ->join('product','productbasket.productid = product.id')
+            ->findAll();
+    }
+
+    public function totalprice()
+    {
+        $productBasketModel = new ProductBasketModel();
+
+
+    }
 }

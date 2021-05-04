@@ -5,12 +5,14 @@ namespace App\Controllers;
 
 
 use App\Entities\BasketEntity;
+use App\Entities\ProductBasketEntity;
 use App\Entities\ProductEntity;
 use App\Entities\UserEntity;
 use App\Models\BasketModel;
 use App\Models\ProductBasketModel;
 use App\Models\ProductModel;
 use CodeIgniter\API\ResponseTrait;
+use CodeIgniter\Entity;
 
 class Basket extends BaseController
 {
@@ -23,11 +25,19 @@ class Basket extends BaseController
         $productbasketModel = new ProductBasketModel();
 
 
-        $basket = $basketModel->finduserid(new UserEntity(['id'=>$this->session->get('userID')]));
+        $basket = $basketModel->finduserid(new UserEntity(['id' => $this->session->get('userID')]));
+        $products = $productbasketModel->orderitems(new ProductBasketEntity(['basketid' => $basket->id]));
+
+        $total = 0;
+        foreach ($products as $product) {
+            $temp = $product['price'] * $product['quantity'];
+            $total += $temp;
+        }
 
         $data = [
             "title" => "Products",
-            'products' => $basket
+            'products' => $products,
+            'totals' => $total
         ];
 
         $hdata = [
@@ -38,6 +48,7 @@ class Basket extends BaseController
         if (!$this->session->get('loggedIn')) {
             return redirect()->to('/');
         }
+
 
         echo view('templates/header', $hdata);
         echo view('basket/basket', $data);
@@ -61,7 +72,34 @@ class Basket extends BaseController
 
         return $this->respond((new BasketModel())->addProduct((new UserEntity(['id' => $this->session->get('userID')])), $product, $qty));
 
+    }
 
+    public function checkout()
+    {
+
+        $basketModel = new BasketModel();
+        $basket = $basketModel->finduserid(new UserEntity(['id' => $this->session->get('userID')]));
+        $basketModel->checkout($basket);
+
+        return redirect()->to('/basket/success');
+
+    }
+
+
+    public function success()
+    {
+        $hdata = [
+            "title" => 'Purchased'
+        ];
+
+
+        if (!$this->session->get('loggedIn')) {
+            return redirect()->to('/');
+
+        }
+        echo view('templates/header', $hdata);
+        echo view('/success');
+        echo view('templates/footer');
     }
 
 

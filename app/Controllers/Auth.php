@@ -44,7 +44,7 @@ class Auth extends BaseController
                 $this->session->set('userID', $userLogin->id);
                 return redirect()->to('/');
             } else {
-                return redirect()->back()->with('error', 'Incorrect credentials')->withInput();
+                return redirect()->back()->with('error', 'Phone number or password wrong.')->withInput();
             }
 
         } else {
@@ -139,6 +139,7 @@ class Auth extends BaseController
             echo view('templates/footer');
         }
     }
+
 
 }
 

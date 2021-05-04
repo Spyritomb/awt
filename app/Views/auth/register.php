@@ -33,6 +33,8 @@
 
         <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
 
+        <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" />
+
     </form>
 </main>
 <!---->
